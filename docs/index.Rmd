@@ -1,0 +1,90 @@
+---
+title: "Daytracker additional data"
+author: "Tamas Nagy"
+date: "5/10/2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(tidyverse)
+library(haven)
+library(labelled)
+library(here)
+
+```
+
+```{r}
+# Read data
+
+# The zero-order Pearson or Spearman correlation between physical activity (measured as a covariate) and the diurnal cortisol slope  
+# 
+# The cortisol awakening response expressed as the raw mean difference of cortisol from awakening to peak (30 minutes later) and standard deviation in different levels of physical activity participation (high, low, no physical activity/sedentary, if data are available) 
+
+nf_raw <- read_sav(here("data/Hungary_scales.sav"))
+
+glimpse(nf_raw)
+
+variables <-
+    tibble(nm = names(nf_raw),
+           lab = var_label(nf_raw) %>% as.character())
+
+glimpse(variables)
+
+nf_raw %>% 
+    select(dtidh,
+           ex_mild = Frequency.mild.energetic.2,
+           ex_moderate = Frequency.moderate.energetic.3,
+           ex_vigorous = frequency.vigorous..4,
+           exmod, exvig, extot,
+           cortwcar, cortlcar,
+           cortwregsl1, cortlregsl1,
+           cortbothok,
+           wcarok, lcarok) %>% 
+    view() 
+
+
+
+
+nf_raw %>% 
+    select(dtidh,
+           ex_mild = Frequency.mild.energetic.2,
+           ex_moderate = Frequency.moderate.energetic.3,
+           ex_vigorous = frequency.vigorous..4,
+           exmod, exvig, extot) %>% 
+    count(ex_moderate, ex_vigorous, extot)
+
+
+# The zero-order Pearson or Spearman correlation between physical activity (measured as a covariate) and the diurnal cortisol slope  
+
+nf_raw %>% 
+    select(extot,
+           cortwregsl1, 
+           cortlregsl1) %>% 
+    correlation::correlation()
+
+# Extot: scale from 0 to 6, the sum of moderate and vigorous exercise (both 0-3)
+
+# 
+# The cortisol awakening response expressed as the raw mean difference of cortisol from awakening to peak (30 minutes later) and standard deviation in different levels of physical activity participation (high, low, no physical activity/sedentary, if data are available)    
+
+
+    
+
+
+```
+
+# Question about exercise
+
+The following question was asked of participants:
+
+*"How often do you take part in sports or activities that are mildly energetic, moderately energetic or vigorous?"*
+
+Mildly energetic (e.g. walking, woodwork, weeding, hoeing, bicycle repair, general housework) Moderately energetic (e.g. cycling, dancing, scrubbing, dancing, golf, decorating, lawn mowing, leisurely swimming) Vigorous (e.g. running, hard swimming, tennis, squash, digging, cycle racing)
+
+ex_mild, ex_moderate, ex_vigorous
+
+1 Three times or more a week 2 Once to twice a week 3 About once to three times a month 4 Never / hardly ever
