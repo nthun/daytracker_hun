@@ -58,10 +58,6 @@ nf_raw %>%
 
 ### 2. The cortisol awakening response expressed as the raw mean difference of cortisol from awakening to peak (30 minutes later) and standard deviation in different levels of physical activity participation (high, low, no physical activity/sedentary, if data are available).
 
-3. M/SD of the age of each subsample (both from self-report and accelerometer)
-4. % Female in each subsample (both from self-report and accelerometer)
-5. M/SD of BMI in each subsample (both from self-report and accelerometer, if available)
-
 ```{r}
 
 nf_raw %>% 
