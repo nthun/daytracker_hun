@@ -22,6 +22,9 @@ library(correlation)
 
 1.  The zero-order Pearson or Spearman correlation between physical activity (measured as a covariate) and the diurnal cortisol slope.
 2.  The cortisol awakening response expressed as the raw mean difference of cortisol from awakening to peak (30 minutes later) and standard deviation in different levels of physical activity participation (high, low, no physical activity/sedentary, if data are available).
+3. M/SD of the age of each subsample (both from self-report and accelerometer)
+4. % Female in each subsample (both from self-report and accelerometer)
+5. M/SD of BMI in each subsample (both from self-report and accelerometer, if available)
 
 ```{r}
 # Read data
@@ -55,18 +58,21 @@ nf_raw %>%
 
 ### 2. The cortisol awakening response expressed as the raw mean difference of cortisol from awakening to peak (30 minutes later) and standard deviation in different levels of physical activity participation (high, low, no physical activity/sedentary, if data are available).
 
+3. M/SD of the age of each subsample (both from self-report and accelerometer)
+4. % Female in each subsample (both from self-report and accelerometer)
+5. M/SD of BMI in each subsample (both from self-report and accelerometer, if available)
+
 ```{r}
 
 nf_raw %>% 
     select(`Exercise` = extot,
-           cortwcar, 
-           cortlcar) %>% 
+           Age, BMI,
+           `CAR (working day)` = cortwcar, 
+           `CAR (leisure) day` = cortlcar) %>% 
     group_by(Exercise) %>% 
     summarise(N = n(),
-              `Mean CAR (working day)` = mean(cortwcar, na.rm = TRUE),
-              `SD CAR (working day)` = sd(cortwcar, na.rm = TRUE),
-              `Mean CAR (leisure)` = mean(cortlcar, na.rm = TRUE),
-              `SD CAR (leisure)` = sd(cortlcar, na.rm = TRUE)) %>% 
+              `Female %` = 100, 
+              across(Age:`CAR (leisure) day`, list(mean = mean, sd = sd), na.rm = TRUE)) %>% 
     knitr::kable(digits = 2)
 ```
 
